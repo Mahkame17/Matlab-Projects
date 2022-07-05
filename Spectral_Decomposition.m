@@ -1,0 +1,37 @@
+A = input('Input matrix: ');
+
+%getting eigenvalues and eigen vectors of the matrix
+n = size(A,1);
+%calculating eigenvalues
+    syms x
+    p = det(A-eye(n)*x) == 0;   
+    S = double(solve(p,x));
+    lambda = S;
+
+Diag = zeros(n);
+for i=1:n
+    Diag(i,i) = lambda(n-i+1);
+end
+disp('Diagonal matrix')
+disp(Diag)
+
+%calculating eigenvectors
+v_without_eig = zeros(n);
+for idx = 1:n
+    si = lambda(idx);
+    Atilde = (A - si*eye(n));
+    Atilde_red = rref(Atilde);
+    vi = [- Atilde_red(1:(n-1),n);1];
+
+    vi = vi/norm(vi);
+    
+    v_without_eig(:,idx) = vi;
+end
+%Producong Unitary matrix using eigenvectors
+U = zeros(n);
+for i = 1:n
+    U(:,i)= v_without_eig(:,n-i+1);
+end
+
+disp('Unitary matrix')
+disp(U)
